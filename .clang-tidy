@@ -2,15 +2,45 @@ Checks: 'bugprone-*,cppcoreguidelines-*,modernize-*,performance-*,readability-*,
 
 WarningsAsErrors: '*'
 CheckOptions:
+  # Основные правила именования
   - { key: readability-identifier-naming.NamespaceCase,       value: lower_case }
-  - { key: readability-identifier-naming.PrivateMemberPrefix, value: m_         }
-  - { key: readability-identifier-naming.ClassCase,           value: CamelCase  }
-  - { key: readability-identifier-naming.StructCase,          value: CamelCase   }
-  - { key: readability-identifier-naming.FunctionCase,        value: lower_case  }
+  - { key: readability-identifier-naming.PrivateMemberPrefix, value: m_ }
+  - { key: readability-identifier-naming.ClassCase,           value: CamelCase }
+  - { key: readability-identifier-naming.StructCase,          value: CamelCase }
+  - { key: readability-identifier-naming.FunctionCase,        value: lower_case }
   - { key: readability-identifier-naming.VariableCase,        value: lower_case }
   - { key: readability-identifier-naming.MemberCase,          value: lower_case }
+
+  # Настройки для всех типов констант - все в UPPER_CASE с подчеркиваниями
+  - { key: readability-identifier-naming.ConstantCase,        value: UPPER_CASE }
+  - { key: readability-identifier-naming.ConstantPrefix,      value: "" }
+  - { key: readability-identifier-naming.ConstantSuffix,      value: "" }
+  - { key: readability-identifier-naming.ConstantParameterCase, value: lower_case } # Параметры-константы остаются в lower_case
+
+  # Настройки для разных типов констант
   - { key: readability-identifier-naming.MacroDefinitionCase, value: UPPER_CASE }
   - { key: readability-identifier-naming.GlobalConstantCase,  value: UPPER_CASE }
-  - { key: readability-identifier-naming.ClassConstantCase,   value: lower_case }
-  - { key: readability-identifier-naming.ConstantMemberCase,  value: lower_case }
-  - { key: readability-identifier-naming.StaticConstantCase,  value: lower_case }
+  - { key: readability-identifier-naming.ClassConstantCase,   value: UPPER_CASE }
+  - { key: readability-identifier-naming.ConstantMemberCase,  value: UPPER_CASE }
+  - { key: readability-identifier-naming.StaticConstantCase,  value: UPPER_CASE }
+
+  # Настройки префиксов для разных типов констант
+  - { key: readability-identifier-naming.GlobalConstantPrefix, value: "" }
+  - { key: readability-identifier-naming.ClassConstantPrefix,  value: "" }
+  - { key: readability-identifier-naming.ConstantMemberPrefix, value: "" }
+  - { key: readability-identifier-naming.StaticConstantPrefix, value: "" }
+
+  # Подчеркивания между словами в константах
+  - { key: readability-identifier-naming.ConstantHungarianPrefix, value: false }
+  - { key: readability-identifier-naming.MacroDefinitionIgnoredRegexp, value: "" }
+  - { key: readability-identifier-naming.StaticConstantIgnoredRegexp, value: "" }
+  - { key: readability-identifier-naming.GlobalConstantIgnoredRegexp, value: "" }
+  - { key: readability-identifier-naming.ClassConstantIgnoredRegexp, value: "" }
+  - { key: readability-identifier-naming.ConstantMemberIgnoredRegexp, value: "" }
+
+  # Явное указание для использования подчеркиваний
+  - { key: readability-identifier-naming.GlobalConstantNeedsSnakeCase, value: true }
+  - { key: readability-identifier-naming.ClassConstantNeedsSnakeCase, value: true }
+  - { key: readability-identifier-naming.ConstantMemberNeedsSnakeCase, value: true }
+  - { key: readability-identifier-naming.StaticConstantNeedsSnakeCase, value: true }
+  - { key: readability-identifier-naming.MacroDefinitionNeedsSnakeCase, value: true }

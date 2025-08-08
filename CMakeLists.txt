@@ -9,7 +9,7 @@ pkg_check_modules(DPDK REQUIRED libdpdk)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mssse3 -msse4.2")
 
-add_executable(${PROJECT_NAME} main.cpp)
+add_executable(${PROJECT_NAME} main.cpp arp.cpp dpdk.cpp)
 
 target_link_libraries(${PROJECT_NAME} PRIVATE ${DPDK_LIBRARIES} fmt::fmt)
 

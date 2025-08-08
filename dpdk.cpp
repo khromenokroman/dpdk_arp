@@ -10,13 +10,14 @@
 #include <vector>
 
 namespace dpdk::main {
+DPDK::~DPDK() {rte_eal_cleanup();}
 void DPDK::init(std::vector<std::string> const &ports) {
     std::vector<std::string> eal_params;
 
     eal_params.emplace_back("./app");
 
     eal_params.emplace_back("-l");
-    eal_params.emplace_back(std::to_string(0ul));
+    eal_params.emplace_back(std::to_string(0UL));
 
     eal_params.emplace_back("-d");
     eal_params.emplace_back(M_MEMPOOL_RING_DRIVER);
@@ -34,9 +35,9 @@ void DPDK::init(std::vector<std::string> const &ports) {
     eal_params.emplace_back("--proc-type=primary");
 
     if (!ports.empty()) {
-        for (auto &one_port : ports) {
+        for (auto const &one_port : ports) {
             eal_params.emplace_back("--allow");
-            eal_params.emplace_back(std::move(one_port));
+            eal_params.emplace_back(one_port);
         }
     }
 
@@ -47,10 +48,10 @@ void DPDK::init(std::vector<std::string> const &ports) {
     }
 
     {
-        auto const init_res = rte_eal_init(static_cast<int>(eal_printer.size()), eal_printer.data());
-        auto const tmp_errno = rte_errno;
-        if (init_res < 0) {
-            throw InitDpdk(::fmt::format(FMT_COMPILE("Init: {}"), rte_strerror(tmp_errno)));
+        auto const INIT_RES = rte_eal_init(static_cast<int>(eal_printer.size()), eal_printer.data());
+        auto const TMP_ERRNO = rte_errno;
+        if (INIT_RES < 0) {
+            throw InitDpdk(::fmt::format(FMT_COMPILE("Init: {}"), rte_strerror(TMP_ERRNO)));
         }
     }
 }
