@@ -14,11 +14,11 @@ class Arp {
     Arp& operator=(Arp const&) = delete;
     Arp& operator=(Arp&&) = delete;
 
-    void start();
+    void start(uint32_t ip_address);
 
    private:
-    main::DPDK m_dpdk;           // 1
+    main::DPDK m_dpdk;           // 8
     std::atomic<bool> m_running; // 1
-    static_assert(sizeof m_dpdk == 1);
+    static_assert(sizeof m_dpdk == 8);
 };
 } // namespace dpdk::arp
