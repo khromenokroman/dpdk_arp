@@ -17,7 +17,7 @@ int main() {
     try {
         std::vector<std::string> ports{"0000:00:03.0"};
         // IP-адрес, для которого будем обрабатывать ARP-запросы
-        char const* ip_str = "192.168.1.100";
+        char const* ip_str = "192.168.1.110";
         ::fmt::print("Запуск ARP-сервера для IP: {}\n", ip_str);
 
         dpdk::arp::Arp arp(ports);

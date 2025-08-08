@@ -158,74 +158,74 @@ void DPDK::process_arp_requests(uint16_t port_id, uint32_t ip_address) {
     }
 }
 void DPDK::send_arp_reply(uint16_t port_id, struct rte_mbuf *arp_request, uint32_t src_ip) {
-    // // Получаем Ethernet и ARP заголовки из запроса
-    // struct rte_ether_hdr* req_eth_hdr = rte_pktmbuf_mtod(arp_request, struct rte_ether_hdr*);
-    // struct rte_arp_hdr* req_arp_hdr = (struct rte_arp_hdr*)(req_eth_hdr + 1);
-    //
-    // // Создаем новый буфер для ответа
-    // struct rte_mbuf* arp_reply = rte_pktmbuf_alloc(m_mbuf_pool);
-    // if (arp_reply == nullptr) {
-    //     ::fmt::print("Ошибка: не удалось выделить память для ARP-ответа\n");
-    //     return;
-    // }
-    //
-    // // Получаем указатель на данные пакета
-    // char* reply_data = rte_pktmbuf_mtod(arp_reply, char*);
-    //
-    // // Формируем Ethernet заголовок
-    // struct rte_ether_hdr* reply_eth_hdr = reinterpret_cast<struct rte_ether_hdr*>(reply_data);
-    //
-    // // MAC-адрес получателя - это MAC-адрес отправителя ARP-запроса
-    // rte_ether_addr_copy(&req_eth_hdr->src_addr, &reply_eth_hdr->dst_addr);
-    //
-    // // Получаем MAC-адрес нашего порта
-    // struct rte_ether_addr my_mac;
-    // rte_eth_macaddr_get(port_id, &my_mac);
-    //
-    // // MAC-адрес отправителя - наш MAC
-    // rte_ether_addr_copy(&my_mac, &reply_eth_hdr->src_addr);
-    //
-    // // Тип Ethernet - ARP
-    // reply_eth_hdr->ether_type = rte_cpu_to_be_16(RTE_ETHER_TYPE_ARP);
-    //
-    // // Формируем ARP заголовок
-    // struct rte_arp_hdr* reply_arp_hdr = (struct rte_arp_hdr*)(reply_eth_hdr + 1);
-    //
-    // // Копируем основные поля из запроса
-    // reply_arp_hdr->arp_hardware = req_arp_hdr->arp_hardware;
-    // reply_arp_hdr->arp_protocol = req_arp_hdr->arp_protocol;
-    // reply_arp_hdr->arp_hlen = req_arp_hdr->arp_hlen;
-    // reply_arp_hdr->arp_plen = req_arp_hdr->arp_plen;
-    //
-    // // Устанавливаем тип операции как ответ (ARPOP_REPLY = 2)
-    // reply_arp_hdr->arp_opcode = rte_cpu_to_be_16(RTE_ARP_OP_REPLY);
-    //
-    // // Заполняем ARP данные
-    // // SHA (отправитель hardware address) - наш MAC
-    // rte_ether_addr_copy(&my_mac, &reply_arp_hdr->arp_data.arp_sha);
-    //
-    // // SPA (отправитель protocol address) - наш IP
-    // reply_arp_hdr->arp_data.arp_sip = src_ip;
-    //
-    // // THA (получатель hardware address) - MAC-адрес отправителя запроса
-    // rte_ether_addr_copy(&req_arp_hdr->arp_data.arp_sha, &reply_arp_hdr->arp_data.arp_tha);
-    //
-    // // TPA (получатель protocol address) - IP-адрес отправителя запроса
-    // reply_arp_hdr->arp_data.arp_tip = req_arp_hdr->arp_data.arp_sip;
-    //
-    // // Устанавливаем длину пакета
-    // arp_reply->data_len = sizeof(struct rte_ether_hdr) + sizeof(struct rte_arp_hdr);
-    // arp_reply->pkt_len = arp_reply->data_len;
-    //
-    // ::fmt::print("Отправка ARP-ответа размером {} байт через порт {}\n", arp_reply->pkt_len, port_id);
-    //
-    // // Отправляем ответ
-    // uint16_t nb_tx = rte_eth_tx_burst(port_id, 0, &arp_reply, 1);
-    // if (nb_tx != 1) {
-    //     ::fmt::print("Ошибка при отправке ARP-ответа: отправлено {} из 1\n", nb_tx);
-    //     rte_pktmbuf_free(arp_reply);
-    // } else {
-    //     ::fmt::print("ARP-ответ успешно отправлен\n");
-    // }
+    // Получаем Ethernet и ARP заголовки из запроса
+    struct rte_ether_hdr *req_eth_hdr = rte_pktmbuf_mtod(arp_request, struct rte_ether_hdr *);
+    struct rte_arp_hdr *req_arp_hdr = (struct rte_arp_hdr *)(req_eth_hdr + 1);
+
+    // Создаем новый буфер для ответа
+    struct rte_mbuf *arp_reply = rte_pktmbuf_alloc(m_mbuf_pool);
+    if (arp_reply == nullptr) {
+        ::fmt::print("Ошибка: не удалось выделить память для ARP-ответа\n");
+        return;
+    }
+
+    // Получаем указатель на данные пакета
+    char *reply_data = rte_pktmbuf_mtod(arp_reply, char *);
+
+    // Формируем Ethernet заголовок
+    struct rte_ether_hdr *reply_eth_hdr = reinterpret_cast<struct rte_ether_hdr *>(reply_data);
+
+    // MAC-адрес получателя - это MAC-адрес отправителя ARP-запроса
+    rte_ether_addr_copy(&req_eth_hdr->src_addr, &reply_eth_hdr->dst_addr);
+
+    // Получаем MAC-адрес нашего порта
+    struct rte_ether_addr my_mac;
+    rte_eth_macaddr_get(port_id, &my_mac);
+
+    // MAC-адрес отправителя - наш MAC
+    rte_ether_addr_copy(&my_mac, &reply_eth_hdr->src_addr);
+
+    // Тип Ethernet - ARP
+    reply_eth_hdr->ether_type = rte_cpu_to_be_16(RTE_ETHER_TYPE_ARP);
+
+    // Формируем ARP заголовок
+    struct rte_arp_hdr *reply_arp_hdr = (struct rte_arp_hdr *)(reply_eth_hdr + 1);
+
+    // Копируем основные поля из запроса
+    reply_arp_hdr->arp_hardware = req_arp_hdr->arp_hardware;
+    reply_arp_hdr->arp_protocol = req_arp_hdr->arp_protocol;
+    reply_arp_hdr->arp_hlen = req_arp_hdr->arp_hlen;
+    reply_arp_hdr->arp_plen = req_arp_hdr->arp_plen;
+
+    // Устанавливаем тип операции как ответ (ARPOP_REPLY = 2)
+    reply_arp_hdr->arp_opcode = rte_cpu_to_be_16(RTE_ARP_OP_REPLY);
+
+    // Заполняем ARP данные
+    // SHA (отправитель hardware address) - наш MAC
+    rte_ether_addr_copy(&my_mac, &reply_arp_hdr->arp_data.arp_sha);
+
+    // SPA (отправитель protocol address) - наш IP
+    reply_arp_hdr->arp_data.arp_sip = src_ip;
+
+    // THA (получатель hardware address) - MAC-адрес отправителя запроса
+    rte_ether_addr_copy(&req_arp_hdr->arp_data.arp_sha, &reply_arp_hdr->arp_data.arp_tha);
+
+    // TPA (получатель protocol address) - IP-адрес отправителя запроса
+    reply_arp_hdr->arp_data.arp_tip = req_arp_hdr->arp_data.arp_sip;
+
+    // Устанавливаем длину пакета
+    arp_reply->data_len = sizeof(struct rte_ether_hdr) + sizeof(struct rte_arp_hdr);
+    arp_reply->pkt_len = arp_reply->data_len;
+
+    ::fmt::print("Отправка ARP-ответа размером {} байт через порт {}\n", arp_reply->pkt_len, port_id);
+
+    // Отправляем ответ
+    uint16_t nb_tx = rte_eth_tx_burst(port_id, 0, &arp_reply, 1);
+    if (nb_tx != 1) {
+        ::fmt::print("Ошибка при отправке ARP-ответа: отправлено {} из 1\n", nb_tx);
+        rte_pktmbuf_free(arp_reply);
+    } else {
+        ::fmt::print("ARP-ответ успешно отправлен\n");
+    }
 }
 } // namespace dpdk::main
